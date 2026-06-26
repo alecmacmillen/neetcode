@@ -100,7 +100,7 @@ class TestSolution(unittest.TestCase):
         self, nums: list[int], k: int, expected_output: list[int]):
 
         solution = Solution()
-        solution_output = solution.top_k_frequent(nums, k)
+        sres, iolution_output = solution.top_k_frequent(nums, k)
         msg = f"""Test failed for input {nums}, {k}. Expected
             {expected_output}, got {solution_output}."""
         # Use assertCountEqual() because we just want to be sure the 
