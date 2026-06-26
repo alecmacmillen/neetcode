@@ -36,16 +36,48 @@ class Solution:
     def product_except_self(self, nums: list[int]) -> list[int]:
         """
         """
-        length = len(nums)
-        lefts = [math.prod(nums[0:i]) if i > 0 else 1 for i in range(length)]
-        rights = [math.prod(nums[i+1:length+1]) if i < length+1 else 1 for i in range(length)]
-        return [lefts[i] * rights[i] for i in range(length)]
+        # Attempt 2
+        lefts = [1] * len(nums)
+        rights = [1] * len(nums)
+        for i in range(1, len(nums)):
+            lefts[i] = lefts[i-1] * nums[i-1]
+        for i in range(len(nums) - 2, -1, -1):
+            rights[i] = rights[i+1] * nums[i+1]
+        return [lefts[i] * rights[i] for i in range(len(nums))]
+            
+        # Attempt 1
+        # length = len(nums)
+        # lefts = [math.prod(nums[0:i]) if i > 0 else 1 for i in range(length)]
+        # rights = [
+        #    math.prod(nums[i+1:length+1]) if i < length+1 else 1 for i in range(length)]
+        # return [lefts[i] * rights[i] for i in range(length)]
     
     def product_except_self_accepted(
         self, nums: list[int]) -> list[int]:
         """
+        Accepted approach: only use 1 array (res). On the first pass through
+        the input list, store the prefixes in the array. On the second pass,
+        use *= to update my multiplying each prefix by each postfix.
         """
-        pass
+        res = [1] * len(nums)
+        prefix = 1
+        for i in range(len(nums)):
+            # Store the existing prefix in the current index
+            res[i] = prefix
+            # Update the prefix by multiplying it by the next
+            # entry in the input list, in preparation for putting
+            # the updated prefix value in the next index spot
+            prefix *= nums[i]
+
+        postfix = 1
+        # Move through the list in reverse order for postfix
+        for i in range(len(nums) - 1, -1, -1):
+            # This time we have to MULTIPLY the result vector array
+            # by the postfix to get our final result (product except self)
+            res[i] *= postfix
+            # Update the postfix for the next entry
+            postfix *= nums[i]
+        return res
 
 class TestSolution(unittest.TestCase):
     """
